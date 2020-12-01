@@ -6,28 +6,23 @@ defmodule Day1 do
   end
 
   def main() do
-    numbers = read_input()
+    numbers =
+      read_input()
+      |> MapSet.new()
 
     {lower, upper} = Enum.split_with(numbers, fn x -> x < 1010 end)
+    upper = MapSet.new(upper)
 
-    {x, y} =
-      Enum.find_value(for(i <- lower, j <- upper, do: {i, j}), fn {x, y} ->
-        case x + y do
-          2020 -> {x, y}
-          _ -> nil
-        end
-      end)
-
+    x = Enum.find(lower, fn x -> MapSet.member?(upper, 2020 - x) end)
+    y = 2020 - x
     IO.puts(x * y)
 
-    {x, y, z} =
-      Enum.find_value(for(i <- numbers, j <- numbers, k <- numbers, do: {i, j, k}), fn {x, y, z} ->
-        case x + y + z do
-          2020 -> {x, y, z}
-          _ -> nil
-        end
+    {x, y} =
+      Enum.find(for(i <- numbers, j <- numbers, do: {i, j}), fn {x, y} ->
+        Enum.member?(numbers, 2020 - (x + y))
       end)
 
+    z = 2020 - (x + y)
     IO.puts(x * y * z)
   end
 end
