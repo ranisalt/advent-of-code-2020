@@ -61,7 +61,7 @@ defmodule Day4 do
         MapSet.subset?(required_fields(), keys)
       end)
 
-    Enum.count(passports_with_required_fields)
+    length(passports_with_required_fields)
     |> IO.puts()
 
     Enum.count(passports_with_required_fields, fn passport -> is_valid_passport(passport) end)

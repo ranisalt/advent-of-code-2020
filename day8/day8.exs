@@ -12,7 +12,7 @@ defmodule Day8 do
 
   defp try_exec(instructions, state) do
     # infinite loop with counter
-    Enum.reduce_while(0..Enum.count(instructions), state, fn _, {pc, acc, history} ->
+    Enum.reduce_while(0..length(instructions), state, fn _, {pc, acc, history} ->
       if MapSet.member?(history, pc) do
         {:halt, acc}
       else

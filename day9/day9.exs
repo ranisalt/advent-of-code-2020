@@ -26,7 +26,7 @@ defmodule Day9 do
       end)
       |> IO.inspect()
 
-    last = Enum.count(input) - 1
+    last = length(input) - 1
 
     Enum.find_value(0..last, fn i ->
       Enum.find_value(i..last, fn j ->

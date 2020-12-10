@@ -2,7 +2,7 @@ defmodule Day6 do
   defp mapset_operate(data, reducer) do
     Enum.map(data, fn answers ->
       Enum.reduce(answers, reducer)
-      |> Enum.count()
+      |> MapSet.size()
     end)
     |> Enum.reduce(fn x, acc -> acc + x end)
     |> IO.puts()
