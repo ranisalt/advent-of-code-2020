@@ -33,8 +33,7 @@ defmodule Day9 do
         slice = Enum.slice(input, i..j)
 
         if Enum.sum(slice) == invalid do
-          sorted = Enum.sort(slice)
-          List.first(sorted) + List.last(sorted)
+          Enum.min(slice) + Enum.max(slice)
         end
       end)
     end)
