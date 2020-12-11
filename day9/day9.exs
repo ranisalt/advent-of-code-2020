@@ -1,8 +1,7 @@
 defmodule Day9 do
   def main() do
     input =
-      IO.stream(:stdio, :line)
-      |> Enum.map(fn x -> String.trim_trailing(x) |> String.to_integer() end)
+      IO.stream(:stdio, :line) |> Enum.map(&(String.trim_trailing(&1) |> String.to_integer()))
 
     limit = 25
     preamble = Enum.take(input, limit)
@@ -10,12 +9,7 @@ defmodule Day9 do
     invalid =
       Enum.drop(input, limit)
       |> Enum.reduce_while(preamble, fn z, acc ->
-        terms_in_preamble =
-          Enum.any?(acc, fn x ->
-            Enum.any?(acc, fn y ->
-              z == x + y
-            end)
-          end)
+        terms_in_preamble = Enum.any?(acc, fn x -> Enum.any?(acc, &(z == x + &1)) end)
 
         if terms_in_preamble do
           [_ | tail] = acc

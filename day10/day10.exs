@@ -2,7 +2,7 @@ defmodule Day10 do
   def main() do
     input =
       IO.stream(:stdio, :line)
-      |> Stream.map(fn x -> String.trim_trailing(x) |> String.to_integer() end)
+      |> Stream.map(&(String.trim_trailing(&1) |> String.to_integer()))
       |> Enum.sort()
 
     {_, diff1, diff3} =

@@ -49,14 +49,9 @@ defmodule Day4 do
     data = IO.read(:stdio, :all) |> String.split(~r{\n\n})
 
     passports_with_required_fields =
-      Enum.map(data, fn passport ->
-        String.split(String.trim_trailing(passport), ~r{\s+})
-        |> Enum.sort()
-      end)
+      Enum.map(data, &(String.split(String.trim_trailing(&1), ~r{\s+}) |> Enum.sort()))
       |> Enum.filter(fn passport ->
-        keys =
-          Enum.map(passport, fn field -> String.slice(field, 0..2) end)
-          |> MapSet.new()
+        keys = Enum.map(passport, &String.slice(&1, 0..2)) |> MapSet.new()
 
         MapSet.subset?(required_fields(), keys)
       end)

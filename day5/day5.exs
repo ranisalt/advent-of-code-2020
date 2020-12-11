@@ -27,13 +27,10 @@ defmodule Day5 do
       end)
       |> MapSet.new()
 
-    max = Enum.max(seats)
-    IO.puts(max)
+    max = Enum.max(seats) |> IO.inspect()
 
-    Enum.find(1..max - 1, fn seat ->
-      Enum.member?(seats, seat - 1) and
-        Enum.member?(seats, seat + 1) and
-        not Enum.member?(seats, seat)
+    Enum.find(1..(max - 1), fn s ->
+      Enum.member?(seats, s - 1) and Enum.member?(seats, s + 1) and not Enum.member?(seats, s)
     end)
     |> IO.puts()
   end

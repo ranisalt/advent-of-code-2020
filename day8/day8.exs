@@ -30,8 +30,7 @@ defmodule Day8 do
         {inst, String.to_integer(imm)}
       end)
 
-    try_exec(instructions, {0, 0, MapSet.new()})
-    |> IO.inspect()
+    try_exec(instructions, {0, 0, MapSet.new()}) |> IO.inspect()
   end
 end
 

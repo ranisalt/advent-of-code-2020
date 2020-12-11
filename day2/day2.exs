@@ -14,17 +14,13 @@ defmodule Day2 do
 
     rules
     |> Enum.count(fn {min, max, char, pwd} ->
-      count =
-        pwd
-        |> String.graphemes()
-        |> Enum.count(&(&1 == char))
+      count = String.graphemes(pwd) |> Enum.count(&(&1 == char))
 
-      min <= count && count <= max
+      min <= count and count <= max
     end)
     |> IO.puts()
 
-    rules
-    |> Enum.count(fn {min, max, char, pwd} ->
+    Enum.count(rules, fn {min, max, char, pwd} ->
       String.at(pwd, min - 1) == char != (String.at(pwd, max - 1) == char)
     end)
     |> IO.puts()

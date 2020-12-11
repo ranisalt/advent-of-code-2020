@@ -1,14 +1,7 @@
 defmodule Day1 do
-  defp read_input() do
-    IO.read(:stdio, :all)
-    |> String.split()
-    |> Enum.map(&String.to_integer(&1))
-  end
-
   def main() do
     numbers =
-      read_input()
-      |> MapSet.new()
+      IO.read(:stdio, :all) |> String.split() |> Enum.map(&String.to_integer(&1)) |> MapSet.new()
 
     {lower, upper} = Enum.split_with(numbers, &(&1 < 1010))
     upper = MapSet.new(upper)

@@ -8,14 +8,9 @@ defmodule Day7 do
   end
 
   defp outermost_color(rules, acc, node) do
-    open =
-      Map.get(rules, node, MapSet.new())
-      |> MapSet.difference(acc)
+    open = Map.get(rules, node, MapSet.new()) |> MapSet.difference(acc)
 
-    Enum.reduce(open, open, fn x, acc ->
-      outermost_color(rules, acc, x)
-      |> MapSet.union(acc)
-    end)
+    Enum.reduce(open, open, &(outermost_color(rules, &2, &1) |> MapSet.union(&2)))
     |> MapSet.union(acc)
   end
 
@@ -42,9 +37,7 @@ defmodule Day7 do
 
     Enum.reduce(contains, Map.new(), fn {container, colors}, acc ->
       Enum.reduce(colors, acc, fn {y, _}, acc ->
-        new_value =
-          Map.get(acc, y, MapSet.new())
-          |> MapSet.put(container)
+        new_value = Map.get(acc, y, MapSet.new()) |> MapSet.put(container)
 
         Map.put(acc, y, new_value)
       end)
@@ -53,8 +46,7 @@ defmodule Day7 do
     |> MapSet.size()
     |> IO.inspect()
 
-    contained_bags(contains, "shiny gold")
-    |> IO.inspect()
+    contained_bags(contains, "shiny gold") |> IO.inspect()
   end
 end
 
