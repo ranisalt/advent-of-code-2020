@@ -4,7 +4,7 @@ defmodule Day6 do
       Enum.reduce(answers, reducer)
       |> MapSet.size()
     end)
-    |> Enum.reduce(fn x, acc -> acc + x end)
+    |> Enum.reduce(&(&1 + &2))
     |> IO.puts()
   end
 
@@ -20,8 +20,8 @@ defmodule Day6 do
         end)
       end)
 
-    mapset_operate(data, fn x, acc -> MapSet.union(x, acc) end)
-    mapset_operate(data, fn x, acc -> MapSet.intersection(x, acc) end)
+    mapset_operate(data, &MapSet.union(&1, &2))
+    mapset_operate(data, &MapSet.intersection(&1, &2))
   end
 end
 

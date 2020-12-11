@@ -2,7 +2,7 @@ defmodule Day1 do
   defp read_input() do
     IO.read(:stdio, :all)
     |> String.split()
-    |> Enum.map(fn x -> String.to_integer(x) end)
+    |> Enum.map(&String.to_integer(&1))
   end
 
   def main() do
@@ -10,10 +10,10 @@ defmodule Day1 do
       read_input()
       |> MapSet.new()
 
-    {lower, upper} = Enum.split_with(numbers, fn x -> x < 1010 end)
+    {lower, upper} = Enum.split_with(numbers, &(&1 < 1010))
     upper = MapSet.new(upper)
 
-    x = Enum.find(lower, fn x -> MapSet.member?(upper, 2020 - x) end)
+    x = Enum.find(lower, &MapSet.member?(upper, 2020 - &1))
     y = 2020 - x
     IO.puts(x * y)
 

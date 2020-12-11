@@ -13,7 +13,7 @@ defmodule Day3 do
         String.at(x, rem(i * right, String.length(x))) != "."
       end)
     end)
-    |> Enum.reduce(fn el, acc -> el * acc end)
+    |> Enum.reduce(&(&1 * &2))
     |> IO.puts()
   end
 end

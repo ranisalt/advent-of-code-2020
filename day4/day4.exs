@@ -64,7 +64,7 @@ defmodule Day4 do
     length(passports_with_required_fields)
     |> IO.puts()
 
-    Enum.count(passports_with_required_fields, fn passport -> is_valid_passport(passport) end)
+    Enum.count(passports_with_required_fields, &is_valid_passport(&1))
     |> IO.puts()
   end
 end
