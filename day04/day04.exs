@@ -1,4 +1,4 @@
-defmodule Day4 do
+defmodule Util do
   defp is_valid_hgt(value) do
     {num, unit} = String.split_at(value, -2)
 
@@ -11,7 +11,7 @@ defmodule Day4 do
 
   defp valid_eye_colors(), do: MapSet.new(["amb", "blu", "brn", "gry", "grn", "hzl", "oth"])
 
-  defp is_valid_passport(passport) do
+  def is_valid_passport(passport) do
     Enum.all?(passport, fn field ->
       {key, value} = String.split_at(field, 4)
 
@@ -42,26 +42,18 @@ defmodule Day4 do
       end
     end)
   end
-
-  defp required_fields(), do: MapSet.new(["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"])
-
-  def main() do
-    data = IO.read(:stdio, :all) |> String.split(~r{\n\n})
-
-    passports_with_required_fields =
-      Enum.map(data, &(String.split(String.trim_trailing(&1), ~r{\s+}) |> Enum.sort()))
-      |> Enum.filter(fn passport ->
-        keys = Enum.map(passport, &String.slice(&1, 0..2)) |> MapSet.new()
-
-        MapSet.subset?(required_fields(), keys)
-      end)
-
-    length(passports_with_required_fields)
-    |> IO.puts()
-
-    Enum.count(passports_with_required_fields, &is_valid_passport(&1))
-    |> IO.puts()
-  end
 end
 
-Day4.main()
+required_fields = MapSet.new(["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"])
+data = IO.read(:stdio, :all) |> String.split(~r{\n\n})
+
+passports_with_required_fields =
+  Enum.map(data, &(String.split(String.trim_trailing(&1), ~r{\s+}) |> Enum.sort()))
+  |> Enum.filter(fn passport ->
+    keys = Enum.map(passport, &String.slice(&1, 0..2)) |> MapSet.new()
+
+    MapSet.subset?(required_fields, keys)
+  end)
+
+length(passports_with_required_fields) |> IO.puts()
+Enum.count(passports_with_required_fields, &Util.is_valid_passport(&1)) |> IO.puts()

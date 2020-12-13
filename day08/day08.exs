@@ -10,7 +10,7 @@ defmodule Day8 do
     end
   end
 
-  defp try_exec(instructions, state) do
+  def try_exec(instructions, state) do
     # infinite loop with counter
     Enum.reduce_while(0..length(instructions), state, fn _, {pc, acc, history} ->
       if MapSet.member?(history, pc) do
@@ -20,18 +20,14 @@ defmodule Day8 do
       end
     end)
   end
-
-  def main() do
-    instructions =
-      IO.stream(:stdio, :line)
-      |> Enum.map(fn line ->
-        [inst, imm] = Regex.run(~r/(\w+) ([+-]\d+)/, line, capture: :all_but_first)
-
-        {inst, String.to_integer(imm)}
-      end)
-
-    try_exec(instructions, {0, 0, MapSet.new()}) |> IO.inspect()
-  end
 end
 
-Day8.main()
+instructions =
+  IO.stream(:stdio, :line)
+  |> Enum.map(fn line ->
+    [inst, imm] = Regex.run(~r/(\w+) ([+-]\d+)/, line, capture: :all_but_first)
+
+    {inst, String.to_integer(imm)}
+  end)
+
+try_exec(instructions, {0, 0, MapSet.new()}) |> IO.inspect()

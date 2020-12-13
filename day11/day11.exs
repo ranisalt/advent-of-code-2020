@@ -1,12 +1,12 @@
-defmodule Day11 do
-  defp adjacent_occupied(seats, {x, y}) do
+defmodule Util do
+  def adjacent_occupied(seats, {x, y}) do
     [{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}]
     |> Enum.count(fn {dx, dy} ->
       Map.get(seats, {x + dx, y + dy}) == "#"
     end)
   end
 
-  defp visible_occupied(seats, height, width, {x, y}) do
+  def visible_occupied(seats, height, width, {x, y}) do
     [
       Stream.zip((x - 1)..min(x - 1, 0), (y - 1)..min(y - 1, 0)),
       Stream.map((x - 1)..min(x - 1, 0), &{&1, y}),
@@ -42,35 +42,30 @@ defmodule Day11 do
     end)
     |> Map.values()
     |> Enum.count(&(&1 == "#"))
-    |> IO.inspect()
-  end
-
-  def main() do
-    seats =
-      IO.stream(:stdio, :line)
-      |> Stream.with_index()
-      |> Enum.reduce(Map.new(), fn {row, x}, acc ->
-        String.trim_trailing(row)
-        |> String.graphemes()
-        |> Stream.with_index()
-        |> Enum.reduce(acc, fn {cell, y}, acc ->
-          case cell do
-            "." -> acc
-            _ -> Map.put(acc, {x, y}, cell)
-          end
-        end)
-      end)
-
-    iterate(seats, &adjacent_occupied(&1, &2), 4)
-
-    {height, width} =
-      Map.keys(seats)
-      |> Enum.reduce({0, 0}, fn {x, y}, {height, width} ->
-        {max(x, height), max(y, width)}
-      end)
-
-    iterate(seats, &visible_occupied(&1, height, width, &2), 5)
   end
 end
 
-Day11.main()
+seats =
+  IO.stream(:stdio, :line)
+  |> Stream.with_index()
+  |> Enum.reduce(Map.new(), fn {row, x}, acc ->
+    String.trim_trailing(row)
+    |> String.graphemes()
+    |> Stream.with_index()
+    |> Enum.reduce(acc, fn {cell, y}, acc ->
+      case cell do
+        "." -> acc
+        _ -> Map.put(acc, {x, y}, cell)
+      end
+    end)
+  end)
+
+Util.iterate(seats, &Util.adjacent_occupied(&1, &2), 4) |> IO.puts()
+
+{height, width} =
+  Map.keys(seats)
+  |> Enum.reduce({0, 0}, fn {x, y}, {height, width} ->
+    {max(x, height), max(y, width)}
+  end)
+
+Util.iterate(seats, &Util.visible_occupied(&1, height, width, &2), 5) |> IO.puts()
