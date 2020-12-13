@@ -23,13 +23,19 @@ defmodule Day9 do
     last = length(input) - 1
 
     Enum.find_value(0..last, fn i ->
-      Enum.find_value(i..last, fn j ->
-        slice = Enum.slice(input, i..j)
+      sum =
+        Enum.find_value((i + 1)..last, fn j ->
+          slice = Enum.slice(input, i..j)
+          sum = Enum.sum(slice)
 
-        if Enum.sum(slice) == invalid do
-          Enum.min(slice) + Enum.max(slice)
-        end
-      end)
+          cond do
+            sum > invalid -> :halt
+            sum == invalid -> Enum.min(slice) + Enum.max(slice)
+            true -> nil
+          end
+        end)
+
+      if sum != nil, do: sum
     end)
     |> IO.inspect()
   end
