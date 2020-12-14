@@ -1,4 +1,4 @@
-defmodule Day8 do
+defmodule Util do
   defp next_state(instructions, pc, acc, history) do
     next_history = MapSet.put(history, pc)
     {inst, imm} = Enum.at(instructions, pc)
@@ -10,11 +10,10 @@ defmodule Day8 do
     end
   end
 
-  def try_exec(instructions, state) do
-    # infinite loop with counter
-    Enum.reduce_while(0..length(instructions), state, fn _, {pc, acc, history} ->
-      if MapSet.member?(history, pc) do
-        {:halt, acc}
+  def try_exec(instructions) do
+    Enum.reduce_while(0..length(instructions), {0, 0, MapSet.new()}, fn _, {pc, acc, history} ->
+      if MapSet.member?(history, pc) or pc == length(instructions) do
+        {:halt, {pc, acc}}
       else
         {:cont, next_state(instructions, pc, acc, history)}
       end
@@ -30,4 +29,23 @@ instructions =
     {inst, String.to_integer(imm)}
   end)
 
-try_exec(instructions, {0, 0, MapSet.new()}) |> IO.inspect()
+{_, acc} = Util.try_exec(instructions)
+IO.puts(acc)
+
+Stream.with_index(instructions)
+|> Enum.find_value(fn {{inst, imm}, i} ->
+  replacement =
+    case inst do
+      "jmp" -> "nop"
+      "nop" -> "jmp"
+      _ -> nil
+    end
+
+  if replacement do
+    case List.replace_at(instructions, i, {replacement, imm}) |> Util.try_exec() do
+      {pc, acc} when pc == length(instructions) -> acc
+      _ -> nil
+    end
+  end
+end)
+|> IO.puts()
